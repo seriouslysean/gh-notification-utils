@@ -1,0 +1,21 @@
+{
+  "manifest_version": 2,
+  "name": "GH Notification Utils",
+  "short_name": "GH Utils",
+  "version": "0.1.0",
+  "description": "Useful actions for managing GitHub notifications in the notification center.",
+  "author": "Sean Kennedy",
+  "homepage_url": "https://github.com/seriouslysean/gh-notification-utils",
+  "permissions": [
+    "activeTab"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://github.com/notifications*",
+        "https://github.com/notifications/*"
+      ],
+      "js": ["utils.js"]
+    }
+  ]
+}
