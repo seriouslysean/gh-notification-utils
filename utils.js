@@ -18,7 +18,7 @@ function createContainer(title) {
     const hr = document.createElement('hr');
     container.appendChild(hr);
     const p = document.createElement('p');
-    p.className = 'h6 border-0 text-gray py-2 pl-2 m-0';
+    p.className = 'h6 border-0 color-text-secondary py-2 pl-2 m-0';
     const node = document.createTextNode(title);
     p.appendChild(node);
     container.appendChild(p);
@@ -33,10 +33,12 @@ function createList() {
 
 function createLink(text) {
     const link = document.createElement('a');
-    link.className = 'btn-link link-gray';
+    link.className = 'filter-item';
     const node = document.createTextNode(text);
     link.appendChild(node);
-    return link;
+    const item = document.createElement('li');
+    item.appendChild(link);
+    return item;
 }
 
 function init() {
@@ -48,11 +50,11 @@ function init() {
 
     const container = createContainer('Utils');
     const list = createList();
-    const unwatchLink = createLink('Unwatch Closed/Merged PRs');
+    const unwatchLink = createLink('✌️ Unwatch PRs');
     unwatchLink.addEventListener('click', unwatchMergedAndClosedPrs);
     list.appendChild(unwatchLink);
     container.appendChild(list);
-    container.setAttribute('style', 'opacity: 0.5;');
+    // container.setAttribute('style', 'opacity: 0.5;');
     target.appendChild(container);
 }
 
