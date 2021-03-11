@@ -2,7 +2,7 @@ function unwatchMergedAndClosedPrs(e) {
     e.preventDefault();
     document.querySelectorAll('.js-notifications-list-item').forEach((item) => {
         const isMerged = item.querySelector('.octicon-git-merge') !== null;
-        const isClosed = item.querySelector('.octicon-git-pull-request.text-red') !== null;
+        const isClosed = item.querySelector('.octicon-git-pull-request.color-text-danger') !== null;
         if (isMerged || isClosed) {
             const unsubscribeForm = item.querySelector('button[title="Unsubscribe"]');
             if (unsubscribeForm !== null) {
