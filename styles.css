@@ -1,0 +1,173 @@
+/* ============================================================
+   GitHub Notification Utils - Styles
+   ============================================================ */
+
+/* Theme variables - dark mode by default */
+:root {
+  /* Dark theme colors */
+  --gh-notif-bg: #0d1117;
+  --gh-notif-fg: #c9d1d9;
+  --gh-notif-border: #30363d;
+  --gh-notif-btn-bg: #21262d;
+  --gh-notif-btn-hover: #30363d;
+  --gh-notif-accent: #58a6ff;
+  --gh-notif-tab-bg: #21262d;
+  --gh-notif-tab-border: #30363d;
+  --gh-notif-tab-fg: #c9d1d9;
+  --gh-notif-error-bg: #332900;
+  --gh-notif-error-fg: #ffe082;
+  --gh-notif-error-border: #5a4300;
+  --gh-notif-shadow: rgba(0, 0, 0, 0.2);
+}
+
+/* Light mode only if explicitly requested by system */
+@media (prefers-color-scheme: light) {
+  :root {
+    --gh-notif-bg: #ffffff;
+    --gh-notif-fg: #24292f;
+    --gh-notif-border: #d0d7de;
+    --gh-notif-btn-bg: #f6f8fa;
+    --gh-notif-btn-hover: #eaeef2;
+    --gh-notif-accent: #0969da;
+    --gh-notif-tab-bg: #f6f8fa;
+    --gh-notif-tab-border: #d0d7de;
+    --gh-notif-tab-fg: #24292f;
+    --gh-notif-error-bg: #fff3cd;
+    --gh-notif-error-fg: #856404;
+    --gh-notif-error-border: #ffeeba;
+    --gh-notif-shadow: rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* Main container */
+.gh-notification-utils {
+  position: fixed;
+  left: 0;
+  bottom: 20px;
+  z-index: 2147483647;
+  background: var(--gh-notif-bg);
+  border: 1px solid var(--gh-notif-border);
+  border-radius: 0; /* Remove rounded corners */
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35); /* Much stronger shadow for better visibility */
+  width: 200px;
+  font-size: 13px;
+  color: var(--gh-notif-fg);
+  transition: left 0.3s cubic-bezier(.4,0,.2,1); /* Use left instead of transform for more predictable behavior */
+  overflow: visible; /* Allow tab to show outside container */
+}
+
+/* Collapsed state - simply move the whole container left 100% */
+.gh-notification-utils--collapsed {
+  left: -200px; /* Move panel offscreen by its width, leaving only the tab visible */
+}
+
+/* Tab for showing/hiding - positioned on the right edge */
+.gh-notification-utils__tab {
+  position: absolute;
+  top: 50%;
+  right: -30px; /* Position tab 30px to the right of container edge */
+  transform: translateY(-50%);
+  width: 30px;
+  height: 60px;
+  background: var(--gh-notif-tab-bg);
+  border: 1px solid var(--gh-notif-tab-border);
+  border-left: none; /* Remove left border where tab meets container */
+  border-radius: 0 6px 6px 0; /* Keep right side rounded */
+  cursor: pointer;
+  color: var(--gh-notif-tab-fg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  box-shadow: 4px 0 10px rgba(0, 0, 0, 0.35); /* Stronger shadow to match container */
+  z-index: 2; /* Ensure tab is above other elements */
+}
+
+/* Vertical text for tab */
+.gh-notification-utils__tab-text {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg); /* Rotate text to be readable from left to right */
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  user-select: none;
+  text-transform: uppercase; /* Make text more visible */
+}
+
+/* Content container */
+.gh-notification-utils__content {
+  padding: 10px;
+}
+
+/* No need to hide content explicitly since entire container moves offscreen */
+/* Just make sure the tab stays interactive */
+.gh-notification-utils--collapsed .gh-notification-utils__tab {
+  pointer-events: auto;
+}
+
+/* Panel title */
+.gh-notification-utils__title {
+  font-weight: bold;
+  margin-bottom: 8px;
+  font-size: 13px;
+  letter-spacing: 0.01em;
+}
+
+/* Form and checkboxes */
+.gh-notification-utils__form {
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.gh-notification-utils__label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 2px 0;
+}
+
+.gh-notification-utils__checkbox {
+  margin: 0;
+  accent-color: var(--gh-notif-accent);
+}
+
+/* Button */
+.gh-notification-utils__button {
+  display: block;
+  width: 100%;
+  margin: 5px 0 0 0;
+  padding: 5px 0;
+  background: var(--gh-notif-btn-bg);
+  border: 1px solid var(--gh-notif-border);
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--gh-notif-fg);
+  transition: background 0.2s, border 0.2s;
+}
+
+.gh-notification-utils__button:hover {
+  background: var(--gh-notif-btn-hover);
+  border-color: var(--gh-notif-accent);
+}
+
+/* Error message */
+.gh-notification-utils__error {
+  background: var(--gh-notif-error-bg);
+  color: var(--gh-notif-error-fg);
+  border: 1px solid var(--gh-notif-error-border);
+  border-radius: 4px;
+  padding: 5px 8px;
+  margin-bottom: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  display: block;
+  word-break: break-word;
+  max-width: 100%;
+  box-sizing: border-box;
+}
