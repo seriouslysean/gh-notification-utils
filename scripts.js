@@ -37,45 +37,40 @@ const hidePanelError = () => {
     errorEl.style.display = 'none';
 };
 
-const unwatchNotificationsByType = type => {
-    hidePanelError();
-
-    const iconSelector = TYPE_TO_SELECTOR[type];
-    if (!iconSelector) {
-        showPanelError('Unknown type: ' + type);
-        return;
-    }
-
+const selectNotificationsByTypes = types => {
     const items = document.querySelectorAll('.js-notifications-list-item');
-    let checkedCount = 0;
+    let selectedCount = 0;
 
     items.forEach(item => {
-        if (!item.querySelector(iconSelector)) return;
+        const matchesType = types.some(type => {
+            const iconSelector = TYPE_TO_SELECTOR[type];
+            return iconSelector && item.querySelector(iconSelector);
+        });
+
+        if (!matchesType) return;
 
         const checkbox = item.querySelector('input[type="checkbox"]');
         if (!checkbox || checkbox.checked) return;
 
         checkbox.click();
-        checkedCount++;
+        selectedCount++;
     });
 
-    if (checkedCount === 0) {
-        showPanelError('No notifications of this type found.');
-        return;
+    return selectedCount;
+};
+
+const clickUnsubscribeButton = () => {
+    const unsubBtn = Array.from(
+        document.querySelectorAll('form[action*="unsubscribe"] button[type="submit"]')
+    ).find(btn => btn.textContent.trim().toLowerCase().includes('unsubscribe'));
+
+    if (!unsubBtn) {
+        showPanelError('Unsubscribe button not found.');
+        return false;
     }
 
-    requestAnimationFrame(() => {
-        const unsubBtn = Array.from(
-            document.querySelectorAll('form[action*="unsubscribe"] button[type="submit"]')
-        ).find(btn => btn.textContent.trim().toLowerCase().includes('unsubscribe'));
-
-        if (!unsubBtn) {
-            showPanelError('Unsubscribe button not found.');
-            return;
-        }
-
-        unsubBtn.click();
-    });
+    unsubBtn.click();
+    return true;
 };
 
 const createFloatingPanel = () => {
@@ -128,11 +123,20 @@ const createFloatingPanel = () => {
     unwatchBtn.className = 'gh-notification-utils__button';
     unwatchBtn.textContent = 'Unwatch Selected';
     unwatchBtn.addEventListener('click', () => {
+        hidePanelError();
+
         const checkedTypes = Array.from(
             form.querySelectorAll('input[type="checkbox"]:checked')
         ).map(cb => cb.value);
 
-        checkedTypes.forEach(unwatchNotificationsByType);
+        const selectedCount = selectNotificationsByTypes(checkedTypes);
+
+        if (selectedCount === 0) {
+            showPanelError('No notifications found');
+            return;
+        }
+
+        requestAnimationFrame(() => clickUnsubscribeButton());
     });
     content.appendChild(unwatchBtn);
 
